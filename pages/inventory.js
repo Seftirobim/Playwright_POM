@@ -3,7 +3,7 @@ exports.inventoryPage = class inventoryPage {
     constructor(page){
         this.page = page;
         this.inventoryContainer = page.locator('.inventory_container');
-
+        this.inventory_url_pattern = /.*inventory/;
         this.prodNameElement = page.locator('.inventory_item_name');
         // mengambil id dengan text awal ditandai dengan simbol [ ^ ]
         this.addTocartButton = page.locator('button[id^="add-to-cart"]');
@@ -11,8 +11,10 @@ exports.inventoryPage = class inventoryPage {
 
         this.cartButton = page.locator('.shopping_cart_container');
         this.cartBadge = page.locator('.shopping_cart_badge');
+        this.getSelectedProdInv = []; // Menampung product yang di pilih oleh user, untuk assertion di fitur cart page
         
     }
+
 
     // Add to cart by loop
     async addTocart(amount){
@@ -20,13 +22,14 @@ exports.inventoryPage = class inventoryPage {
         for(let i=1; i<= amount; i++){
 
             // Untuk mengatsai Error: locator.click: Error: strict mode violation
-            // Karena playwright mengidentifikasi addTocartButton dengan banyak jdi ambigu mau pilih locator yg mana
+            // Karena mengidentifikasi addTocartButton dengan banyak jdi ambigu mau pilih locator yg mana
             // Maka gunakan first() untuk menseleksi element pertama dari addTocartButton
             await this.addTocartButton.first().click();
+            
         }
     }
 
-    // Fungsi untuk mengeluarkan karakter-karakter pada string yang tidak valid
+    // Fungsi untuk mengeluarkan karakter-karakter yang tidak valid pada string
     escapeString(str) {
         return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
     }
@@ -42,6 +45,9 @@ exports.inventoryPage = class inventoryPage {
             const idBtn = '#add-to-cart-' + replace;
             const escape = this.escapeString(idBtn);
             await this.page.locator(`${escape}`).click();
+
+            this.getSelectedProdInv.push(prodname); //Menampung product yang di pilih oleh user
+             
         }
     }
 
@@ -63,6 +69,8 @@ exports.inventoryPage = class inventoryPage {
             await this.removeButton.first().click();
         }
     }
+
+  
 
 
 
