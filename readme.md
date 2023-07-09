@@ -7,7 +7,7 @@ Web Automation testing using Playwright JavaScript on the Dummy website http://s
 Initialize
 
 ```sh
-  npx init
+npm init
 ``` 
 
 Install playwright
@@ -18,6 +18,6 @@ npm init playwright@latest
 
 Run Test
 ```sh
-  npx playwright test
+npx playwright test
 ``` 
 
