@@ -24,7 +24,7 @@ test.describe('Login page',() =>{
 
     for (const username of users) {
         test(`I want to login with ${username}`, async ({ page }) =>{
-            //Panggil class / object LoginPage
+            //Panggil class dan buat object LoginPage
             const Login = new LoginPage(page);
 
             await Login.login(username,password);

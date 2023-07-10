@@ -14,7 +14,9 @@ exports.cartPage = class cartPage extends inventoryPage {
             // this.cartButton = page.locator('.shopping_cart_container');
             // this.cartBadge = page.locator('.shopping_cart_badge');
 
-            this.getSelectedProdCart = []; // menampung nama product dari cart page untuk assertion
+            this.getSelectedProdCart = []; // menampung nama product dari cart page untuk assertion cart
+            this.getSelectedPriceCart = []; // menampung price product dari cart page untuk assertion checkout
+
         }
 
 
@@ -24,10 +26,16 @@ exports.cartPage = class cartPage extends inventoryPage {
             // this.page.$$('.inventory_item_name') = Mengembalikan sebagai array dari element
             // this.page.locator('.inventory_item_name') = Mengembalikan object locator
             
-            const prodNames = await this.page.$$('.inventory_item_name') 
+            const prodNames = await this.page.$$('.inventory_item_name');
+            const itemPrices = await this.page.$$('.inventory_item_price') 
             for (let prodname of prodNames){
                 const text = await prodname.textContent();
                 this.getSelectedProdCart.push(text);
+            }
+
+            for (let itemprice of itemPrices){
+                const text = await itemprice.textContent();
+                this.getSelectedPriceCart.push(text);
             }
 
             await expect(this.page).toHaveURL(this.cart_url_pattern);

@@ -1,3 +1,5 @@
+const { expect } = require("@playwright/test");
+
 exports.inventoryPage = class inventoryPage {
 
     constructor(page){
@@ -13,7 +15,11 @@ exports.inventoryPage = class inventoryPage {
         this.cartBadge = page.locator('.shopping_cart_badge');
         this.getSelectedProdInv = []; // Menampung product yang di pilih oleh user, untuk assertion di fitur cart page
         
-    }
+        // Sort Products
+        this.selectOptions = '[data-test="product_sort_container"]';
+       
+       
+    }   
 
 
     // Add to cart by loop
@@ -36,7 +42,7 @@ exports.inventoryPage = class inventoryPage {
 
     // Add to cart by product name
     async addTocartByName(prodNames){
-        // loop sesuai array nama yang ada pada test spec
+        // loop sesuai array nama yang ada pada spec
         for (const prodname of prodNames){
             // Untuk menghindari error Error: locator.click: Unexpected token
             // Karena ada karakter yang tidak valid dalam nama seperti "( )"
@@ -70,6 +76,64 @@ exports.inventoryPage = class inventoryPage {
         }
     }
 
+
+    async sortProdByName(label){
+        await this.page.selectOption(this.selectOptions, {label: label});
+        
+        // PRODUCTS NAME
+        let arrAllProductsName = []; //Menampung semua product name element
+        let arrCompareName = []; //Menampung semua product name element untuk di compare
+      
+        const getProductsName = await this.page.$$('.inventory_item_name'); //array element
+        for (const productName of getProductsName){
+            const name = await productName.textContent(); // get the text
+            arrAllProductsName.push(name); 
+            arrCompareName.push(name); 
+        }
+
+        const defaultSortName = arrCompareName.sort(); // variable compare di jadikan sort default dulu 
+
+        if(label == 'Name (Z to A)'){
+            defaultSortName.sort().reverse();
+            // console.log(arrAllProductsName);
+            // console.log(defaultSortName);
+            expect(arrAllProductsName).toEqual(defaultSortName);
+
+        }else if (label == 'Name (A to Z)'){
+            // console.log(arrAllProductsName)
+            // console.log(defaultSortName);
+
+            expect(arrAllProductsName).toEqual(defaultSortName);
+        }
+        // END PRODUCTS NAME
+
+        // PRODUCTS PRICE
+        let arrAllProductsPrices = [];
+        let arrComparePrices = [];
+
+        const getProductsPrices = await this.page.$$('.inventory_item_price');
+
+        for (const productPrice of getProductsPrices){
+            const price = await productPrice.textContent();
+            const makeNumber = Number(price.replace('$',''));
+            arrAllProductsPrices.push(makeNumber);
+            arrComparePrices.push(makeNumber);
+        }
+
+        const defaultSortPrice = arrComparePrices.sort((a, b) => a - b);
+
+        if (label == 'Price (high to low)'){
+            defaultSortPrice.sort((a, b) => b - a);
+            // console.log(arrAllProductsPrices);
+            // console.log(defaultSortPrice);
+            expect(arrAllProductsPrices).toEqual(defaultSortPrice);
+        }else if(label == 'Price (low to high)'){
+            // console.log(arrAllProductsPrices);
+            // console.log(defaultSortPrice);
+            expect(arrAllProductsPrices).toEqual(defaultSortPrice);
+        }
+        
+    }
   
 
 
