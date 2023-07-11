@@ -79,7 +79,7 @@ exports.checkoutPage = class checkoutPage extends cartPage {
 
         }else if (isNaN(await this.postalCode.inputValue())){
                 await this.continueButton.click();
-                await expect(this.errorMsg).toHaveText("Error Invalid Input: Postal Code must be a number");   
+                await expect(this.errorMsg).toHaveText("Error: Invalid Input: Postal Code must be a number");   
         }else if (cancel == true){
             await this.cancelButton.click();
         }else{

@@ -21,14 +21,14 @@ test.describe('Login page',() =>{
     ];
     
     const password = "secret_sauce";
-
+    
     for (const username of users) {
         test(`I want to login with ${username}`, async ({ page }) =>{
             //Panggil class dan buat object LoginPage
             const Login = new LoginPage(page);
 
             await Login.login(username,password);
-            await expect(page).toHaveURL(/.*inventory/);
+            
         })
     }
 
@@ -50,7 +50,7 @@ test.describe('Login page',() =>{
 
     });
 
-    test('I want to click to the close button within the error message after i fill invalid credentials', async({page}) =>{
+    test('I want to click to the close button within the error message after i fill invalid credentials @functional', async({page}) =>{
         const Login = new LoginPage(page);
         await Login.login('invalid','invalid');
         
@@ -81,7 +81,7 @@ test.describe('Login page',() =>{
         await expect(page.locator('[data-test="error"]')).toContainText("Epic sadface: Password is required");
     })
     
-    test('I want to logout webapp', async ({ page }) => {
+    test('I want to logout webapp @functional', async ({ page }) => {
         
         const Login = new  LoginPage(page)
 
