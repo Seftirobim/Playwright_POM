@@ -58,7 +58,7 @@ test.describe('Sort Product', () => {
         "Price (high to low)"]
     ];
 
-    const [users,labels] = datas; // Inisialisasi datas[0] adalah users, datas[1] adalah labels
+    const [users,labels] = datas; // definisikan datas[0] adalah users, datas[1] adalah labels
     for (const user of users){ // looping dulu sebanyak user yaitu 2 user
 
         // lalu looping lagi sebanyak label. kalo di panggil valuenya akan menjadi:
@@ -111,7 +111,7 @@ test.describe('Cart Feature',() =>{
         // Hitung element tombol remove
         const length = await inventory.removeButton.count();
 
-        // tampilkan text pada cartBade
+        // dapatkan text pada cartBade
         const amountOfcart = await inventory.cartBadge.textContent();
 
         // assert apakah hasilnya sama
